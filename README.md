@@ -46,8 +46,8 @@ if german:
 ## Sources
 I do not own any of the wordlists, refer to the original sources here
 
-worliste.txt taken from https://github.com/davidak/wortliste
-words.txt taken from https://github.com/dwyl/english-words
-top10keng.txt taken from https://github.com/first20hours/google-10000-english (google-10000-english.txt)
-top10kde.txt taken from https://github.com/signalwerk/pwd/tree/master/wordlists
+worliste.txt taken from https://github.com/davidak/wortliste  
+words.txt taken from https://github.com/dwyl/english-words  
+top10keng.txt taken from https://github.com/first20hours/google-10000-english (google-10000-english.txt)  
+top10kde.txt taken from https://github.com/signalwerk/pwd/tree/master/wordlists  
 
