@@ -2,11 +2,48 @@ import secrets
 import codecs
 import math
 
+#THESE VALUES WILL BE OVERRIDEN BY config.txt
 #number of Words in password
-numWords = 3
+numWords = 0
 #which languages should be included in the password
-english = True
+english = False
 german = False
+
+#whether or not the txt files are in the parent folder or root, leave false for using the script, set true when compiling to exe
+txtInParent = False
+pathPrefix = "..//"
+if txtInParent == False:
+        pathPrefix = ""
+
+#read config
+config = codecs.open(pathPrefix + "config.txt", 'r', "utf-8").readlines()
+config = [line.strip() for line in config]
+try:
+        print("config.txt:")
+        for line in config:
+                print(line)
+                pair = line.split("=")
+                key = pair[0].strip()
+                value = pair[1].strip()
+                if key == "numWords":
+                        numWords = int(value)
+                elif key == "english":
+                        english = bool(value)
+                elif key == "german":
+                        german = bool(value)
+                else:
+                        input("config.txt has missing values (typo?)")
+                        exit()
+        print()
+except:
+        input("Could not read config due to some error. Press enter to exit")
+        exit() 
+
+if numWords < 1 or numWords > 15:
+                        print("number of words out of bounds, choose number in config.txt between 1 and 15")
+                        input("Press enter to exit")
+                        exit()
+
 #digit and specialChar of your preference
 numberChar = "1"
 specialChar = "!"
@@ -27,7 +64,7 @@ def combinationsToLenRand(num):
 
 def verifyWordlist(list, strPath):
         if not listIsSet(list):
-                print("duplicate words found, check wordlist quality of: " + strPath)
+                print("WARNING: duplicate words found, check wordlist quality of: " + strPath)
         else:
                 print("no duplicates found, wordlist:"+strPath+" is OK")
 
@@ -35,8 +72,8 @@ def verifyWordlist(list, strPath):
 class lang:
 
         def __init__(self, wordlistPath, top10kPath, encoding):
-                f = codecs.open(wordlistPath, 'r', encoding)
-                f10k = codecs.open(top10kPath, 'r', encoding)
+                f = codecs.open(pathPrefix+wordlistPath, 'r', encoding)
+                f10k = codecs.open(pathPrefix+top10kPath, 'r', encoding)
                 self.wordList = [line.strip() for line in f.readlines()]
                 self.top10k = [line.strip() for line in f10k.readlines()]
                 self.numWords = len(self.wordList)
@@ -66,22 +103,30 @@ if german:
 close = False
 
 #Calculation of password strength for the selected parameters
+
 sumWordsOfLangs = 0
-for lang in langs:
-        sumWordsOfLangs = sumWordsOfLangs + lang.numWords
+numCombinations = 0
+numCombinationsSpecials = 0
 
-numCombinations = math.pow(sumWordsOfLangs, numWords)
+numCombinations10k = 0
+numBits10k = 0
 
-print("\nApproximate Strength with selected Parameters:\n" + str(round(math.log(numCombinations, 2),1))+"bits " +str(combinationsToLenRand(numCombinations)) +" random chars*.")
+def calculateStrength():
+        sumWordsOfLangs = 0
+        for lang in langs:
+                sumWordsOfLangs = sumWordsOfLangs + lang.numWords
 
-numCombinationsSpecials = numCombinations * 9 *len(specials)
-print("\nApproximate Strength for random special version:\n" + str(round(math.log(numCombinationsSpecials, 2),1))+"bits " +str(combinationsToLenRand(numCombinationsSpecials)) +" random chars*.")
-print("random chars*: Corresponding to a pseudorandom password with upper and lowercase letters of the english alphabet and the OWASP recommended 33 special symbols")	
-#in case all words are of a top10k wordlist, this will get checked for each password
-numCombinations10k = math.pow(10000*len(langs), numWords)
-numBits10k = round(math.log(numCombinations10k, 2), 1)
+        numCombinations = math.pow(sumWordsOfLangs, numWords)
 
+        print("\nApproximate Strength with selected Parameters:\n" + str(round(math.log(numCombinations, 2),1))+"bits " +str(combinationsToLenRand(numCombinations)) +" random chars*.")
+        numCombinationsSpecials = numCombinations * 9 *len(specials)
+        print("\nApproximate Strength for random special version:\n" + str(round(math.log(numCombinationsSpecials, 2),1))+"bits " +str(combinationsToLenRand(numCombinationsSpecials)) +" random chars*.")
+        print("random chars*: Corresponding to a pseudorandom password with upper and lowercase letters of the english alphabet and the OWASP recommended 33 special symbols")  
+        #in case all words are of a top10k wordlist, this will get checked for each password
+        numCombinations10k = math.pow(10000*len(langs), numWords)
+        numBits10k = round(math.log(numCombinations10k, 2), 1)
 
+calculateStrength()
 
 def listToString(words, linebreak):
         word = words[0]
@@ -130,7 +175,7 @@ def formatWithSpecials(shuffledWords, random):
                 wrd = wrd + numberChar + specialChar;
         
         if not hasUpper or not hasLower:
-                print("Generated password has no upper-case or lower-case character. This can only happen if a password was generated with either no upper or no lowercase letters, which theoretically can happen but the chances are quite low (with default wordlists and non-zero amount of words).")
+                print("Generated password has no upper-case or lower-case character. This can only happen if a password was generated with either no upper or no lowercase letters, which theoretically can happen but the chances are astronomically low (with default wordlists and non-zero amount of words).")
 
         return wrd
 
@@ -189,13 +234,20 @@ while True:
         print(formatWithSpecials(words, True))
         print()
 
-        msg = "Press Enter to re-run"
+        msg = "Press Enter to re-run. Typing a number and pressing enter will change the number of words.\n"
         if close:
                 msg = "Press Enter to exit"
 
         keypress = input(msg)
-        if keypress == "" and close:
-                break
+        try:
+                #let user choose new number of words by typing it in
+                numWords = int(keypress)
+                while numWords < 1 or numWords > 15:
+                        numWords = int(input("number of words out of bounds, choose number between 1 and 15.\n"))
+                calculateStrength()
+        except:
+                if keypress == "" and close:
+                        break
 
 
 
