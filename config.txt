@@ -1,0 +1,3 @@
+numWords=3
+english=True
+german=False

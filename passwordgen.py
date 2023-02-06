@@ -28,9 +28,10 @@ try:
                 if key == "numWords":
                         numWords = int(value)
                 elif key == "english":
-                        english = bool(value)
+                        english = value == "True"
                 elif key == "german":
-                        german = bool(value)
+                        
+                        german = value == "True"
                 else:
                         input("config.txt has missing values (typo?)")
                         exit()
