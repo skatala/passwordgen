@@ -13,7 +13,7 @@ german=False
 ```
 
 ## Usage
-Install python and run the passwordgen.py
+Install python and run the passwordgen.py or download the release.
 
 ## Security Recommendations
 
