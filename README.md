@@ -1,6 +1,6 @@
 # passwordgen
 Python script to randomly generate a secure and memorable passphrase.
-For ease of remembering the password I would suggest using the output that is formatted with special characters, this will capitalise the first letter and add 2 special characters that will always be the same. This is adds no extra entropy to the password, it is only to comply with website requirements.
+For ease of remembering the password I would suggest using the output that is formatted with special characters, this will capitalise the first letter and add 2 special characters that will always be the same. This adds no extra entropy to the password, it is only to comply with website requirements.
 
 The script calculates the strength of the password based on the wordlists, and if the generated password is too short, or the words all happen to be in the top 10k most frequent words of each language will issue a warning.  
 Toggle the length and which languages you want in your password at this point in passwordgen.py:
