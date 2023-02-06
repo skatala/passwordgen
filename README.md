@@ -1,6 +1,6 @@
 # passwordgen
 Python script to randomly generate a secure and memorable passphrase.
-The script calculates the strength of the password based on the wordlists, and if the generated password is too short, or the words all happen to be in the top 10k most frequent words of each language will issue a warning.
+The script calculates the strength of the password based on the wordlists, and if the generated password is too short, or the words all happen to be in the top 10k most frequent words of each language will issue a warning.  
 Toggle the length and which languages you want in your password at this point in passwordgen.py:
 
 ```
