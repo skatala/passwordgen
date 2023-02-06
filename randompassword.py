@@ -130,7 +130,7 @@ def formatWithSpecials(shuffledWords, random):
                 wrd = wrd + numberChar + specialChar;
         
         if not hasUpper or not hasLower:
-                print("Generated password has no upper-case or lower-case character. This can only happen if a password was generated with either no upper or no lowercase letters, which theoretically can happen but the chances are astronomically low (with default wordlists and non-zero amount of words).")
+                print("Generated password has no upper-case or lower-case character. This can only happen if a password was generated with either no upper or no lowercase letters, which theoretically can happen but the chances are quite low (with default wordlists and non-zero amount of words).")
 
         return wrd
 
